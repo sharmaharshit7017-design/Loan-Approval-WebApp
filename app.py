@@ -2,137 +2,151 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# ==========================
-# Page Configuration
-# ==========================
+
+# =========================================================
+# 1. LOAD TRAINED MODEL
+# =========================================================
+
+model = joblib.load("loan_model.pkl")
+
+
+# =========================================================
+# 2. PAGE CONFIGURATION
+# =========================================================
 
 st.set_page_config(
-    page_title="Loan Approval Prediction",
+    page_title="Loan Approval Predictor",
     page_icon="🏦",
     layout="centered"
 )
 
-# ==========================
-# Load Files
-# ==========================
 
-model = joblib.load("loan_model.pkl")
-scaler = joblib.load("scaler.pkl")
-columns = joblib.load("columns.pkl")
-
-# ==========================
-# Title
-# ==========================
+# =========================================================
+# 3. TITLE
+# =========================================================
 
 st.title("🏦 Loan Approval Prediction")
-st.write("Fill the applicant details below.")
 
-# ==========================
-# Input Form
-# ==========================
+st.write(
+    "Enter the applicant's details below to predict "
+    "whether the loan is likely to be approved."
+)
 
-with st.form("loan_form"):
 
-    gender = st.selectbox("Gender", ["Male", "Female"])
+# =========================================================
+# 4. USER INPUTS
+# =========================================================
 
-    married = st.selectbox("Married", ["Yes", "No"])
+gender = st.selectbox(
+    "Gender",
+    ["Male", "Female"]
+)
 
-    dependents = st.selectbox(
-        "Dependents",
-        ["0", "1", "2", "3+"]
-    )
+married = st.selectbox(
+    "Married",
+    ["Yes", "No"]
+)
 
-    education = st.selectbox(
-        "Education",
-        ["Graduate", "Not Graduate"]
-    )
+dependents = st.selectbox(
+    "Dependents",
+    ["0", "1", "2", "3+"]
+)
 
-    self_employed = st.selectbox(
-        "Self Employed",
-        ["Yes", "No"]
-    )
+education = st.selectbox(
+    "Education",
+    ["Graduate", "Not Graduate"]
+)
 
-    applicantincome = st.number_input(
-        "Applicant Income",
-        min_value=0
-    )
+self_employed = st.selectbox(
+    "Self Employed",
+    ["Yes", "No"]
+)
 
-    coapplicantincome = st.number_input(
-        "Co Applicant Income",
-        min_value=0
-    )
+applicant_income = st.number_input(
+    "Applicant Income",
+    min_value=0,
+    value=5000
+)
 
-    loanamount = st.number_input(
-        "Loan Amount",
-        min_value=0
-    )
+coapplicant_income = st.number_input(
+    "Co-applicant Income",
+    min_value=0.0,
+    value=0.0
+)
 
-    loan_amount_term = st.number_input(
-        "Loan Amount Term",
-        min_value=0
-    )
+loan_amount = st.number_input(
+    "Loan Amount",
+    min_value=0.0,
+    value=150.0
+)
 
-    credit_history = st.selectbox(
-        "Credit History",
-        [1, 0]
-    )
+loan_amount_term = st.number_input(
+    "Loan Amount Term",
+    min_value=0.0,
+    value=360.0
+)
 
-    property_area = st.selectbox(
-        "Property Area",
-        ["Rural", "Semiurban", "Urban"]
-    )
+credit_history = st.selectbox(
+    "Credit History",
+    [1.0, 0.0]
+)
 
-    submit = st.form_submit_button("Predict")
+property_area = st.selectbox(
+    "Property Area",
+    ["Urban", "Semiurban", "Rural"]
+)
 
-# ==========================
-# Prediction
-# ==========================
 
-if submit:
+# =========================================================
+# 5. CREATE INPUT DATAFRAME
+# =========================================================
 
-    sample = pd.DataFrame({
+input_data = pd.DataFrame({
+    "gender": [gender],
+    "married": [married],
+    "dependents": [dependents],
+    "education": [education],
+    "self_employed": [self_employed],
+    "applicantincome": [applicant_income],
+    "coapplicantincome": [coapplicant_income],
+    "loanamount": [loan_amount],
+    "loan_amount_term": [loan_amount_term],
+    "credit_history": [credit_history],
+    "property_area": [property_area]
+})
 
-        "gender":[gender],
-        "married":[married],
-        "dependents":[dependents],
-        "education":[education],
-        "self_employed":[self_employed],
-        "applicantincome":[applicantincome],
-        "coapplicantincome":[coapplicantincome],
-        "loanamount":[loanamount],
-        "loan_amount_term":[loan_amount_term],
-        "credit_history":[credit_history],
-        "property_area":[property_area]
 
-    })
+# =========================================================
+# 6. PREDICTION
+# =========================================================
 
-    # One Hot Encoding
-    sample = pd.get_dummies(sample, drop_first=True)
+if st.button("Predict Loan Approval"):
 
-    # Match Training Columns
-    sample = sample.reindex(
-        columns=columns,
-        fill_value=0
-    )
+    prediction = model.predict(input_data)[0]
 
-    # Scale Data
-    sample = scaler.transform(sample)
+    probability = model.predict_proba(
+        input_data
+    )[0][1]
 
-    # Prediction
-    prediction = model.predict(sample)[0]
 
-    probability = model.predict_proba(sample)[0][1]
-
-    st.divider()
+    # =====================================================
+    # 7. DISPLAY RESULT
+    # =====================================================
 
     if prediction == 1:
-        st.success("✅ Loan Approved")
+
+        st.success(
+            "✅ Loan is likely to be APPROVED"
+        )
+
     else:
-        st.error("❌ Loan Rejected")
 
-    st.metric(
-        "Approval Probability",
-        f"{probability*100:.2f}%"
+        st.error(
+            "❌ Loan is likely to be REJECTED"
+        )
+
+
+    st.write(
+        f"Approval Probability: "
+        f"**{probability * 100:.2f}%**"
     )
-
-    st.progress(float(probability))
