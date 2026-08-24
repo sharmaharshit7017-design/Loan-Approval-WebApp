@@ -1,119 +1,70 @@
-# 🏦 Loan Approval Prediction Web App
+# 🏦 Loan Approval Prediction — Web App
 
-A Streamlit web application that predicts whether a loan application will be approved using a trained Machine Learning model.
+A Machine Learning web application that predicts whether a loan application is likely to be approved based on the applicant's financial and personal information.
 
----
+The application is built with **Streamlit** and uses a trained Scikit-learn machine learning pipeline for predictions.
 
-# 🚀 Features
+## 🚀 Live Demo
 
-- Simple and interactive web interface
-- Real-time loan approval prediction
-- Approval probability score
-- Built using Streamlit
-- Powered by a trained Logistic Regression model
+👉 **[Open the Loan Approval Prediction App](https://loan-approval-webapp-ovdv83qerdrmfbgd2rhdet.streamlit.app/)**
 
 ---
 
-# 🖥️ Technologies Used
+## 📌 About the Project
 
-- Python
-- Streamlit
-- Pandas
-- Scikit-Learn
-- Joblib
+This web application provides a simple interface where users can enter an applicant's details and receive a machine learning prediction for loan approval.
 
----
+The application uses the trained model from the **Loan Approval Prediction** machine learning project.
 
-# 📂 Project Structure
+### Prediction
 
-```
-Loan-Approval-WebApp/
-
-│── app.py
-│── loan_model.pkl
-│── scaler.pkl
-│── columns.pkl
-│── num_imputer.pkl
-│── cat_imputer.pkl
-│── README.md
-│── requirements.txt
-└── .gitignore
-```
+- ✅ **Approved**
+- ❌ **Rejected**
 
 ---
 
-# ▶️ How to Run
+## 🧾 Input Features
 
-Clone the repository
+The application accepts the following information:
 
-```bash
-git clone https://github.com/sharmaharshit7017-design/Loan-Approval-WebApp.git
-```
-
-Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-Run the application
-
-```bash
-streamlit run app.py
-```
-
----
-
-# 📋 Input Features
-
-The application accepts:
+### Personal Information
 
 - Gender
 - Married
 - Dependents
 - Education
 - Self Employed
+
+### Financial Information
+
 - Applicant Income
 - Co-applicant Income
 - Loan Amount
 - Loan Amount Term
 - Credit History
+
+### Property Information
+
 - Property Area
 
 ---
 
-# 📈 Prediction Output
+## 🤖 Machine Learning Model
 
-The application displays:
+The web application uses a trained **Logistic Regression** model.
 
-- ✅ Loan Approved / Rejected
-- 📊 Approval Probability
+The final model achieved:
 
----
+- **Accuracy:** 86.18%
+- **ROC-AUC:** 0.852
 
-# 🔗 Machine Learning Model
+The model was selected after comparing:
 
-The model used in this application was trained in a separate repository.
+- Logistic Regression
+- Decision Tree
+- Random Forest
 
-Machine Learning Repository:
+The complete preprocessing and machine learning pipeline is stored in:
 
-https://github.com/sharmaharshit7017-design/Loan-Approval-Prediction
-
----
-
-# 🌟 Future Improvements
-
-- Better UI Design
-- Model Pipeline
-- Cloud Deployment
-- FastAPI Backend
-- User Authentication
-
----
-
-# 👨‍💻 Author
-
-**Harshit Sharma**
-
-GitHub:
-https://github.com/sharmaharshit7017-design
+```text
+loan_model.pkl
