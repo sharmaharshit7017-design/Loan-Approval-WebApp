@@ -102,17 +102,17 @@ property_area = st.selectbox(
 # =========================================================
 
 input_data = pd.DataFrame({
-    "gender": [gender],
-    "married": [married],
-    "dependents": [dependents],
-    "education": [education],
-    "self_employed": [self_employed],
-    "applicantincome": [applicant_income],
-    "coapplicantincome": [coapplicant_income],
-    "loanamount": [loan_amount],
-    "loan_amount_term": [loan_amount_term],
-    "credit_history": [credit_history],
-    "property_area": [property_area]
+    "Gender": [gender],
+    "Married": [married],
+    "Dependents": [dependents],
+    "Education": [education],
+    "Self_Employed": [self_employed],
+    "ApplicantIncome": [applicant_income],
+    "CoapplicantIncome": [coapplicant_income],
+    "LoanAmount": [loan_amount],
+    "Loan_Amount_Term": [loan_amount_term],
+    "Credit_History": [credit_history],
+    "Property_Area": [property_area]
 })
 
 
