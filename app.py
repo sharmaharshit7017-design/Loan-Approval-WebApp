@@ -122,32 +122,54 @@ input_data = pd.DataFrame({
 
 if st.button("Predict Loan Approval"):
 
-    prediction = model.predict(input_data)[0]
-
-    probability = model.predict_proba(
-        input_data
-    )[0][1]
-
-
-    # =====================================================
-    # 7. DISPLAY RESULT
-    # =====================================================
-
-   if st.button("Predict Loan Approval"):
-
-        st.write("Columns being sent:")
-        st.write(input_data.columns.tolist())
+    try:
 
         prediction = model.predict(input_data)[0]
 
-    else:
+        probability = model.predict_proba(
+            input_data
+        )[0][1]
 
-        st.error(
-            "❌ Loan is likely to be REJECTED"
+
+        # =================================================
+        # 7. DISPLAY RESULT
+        # =================================================
+
+        if prediction == 1:
+
+            st.success(
+                "✅ Loan is likely to be APPROVED"
+            )
+
+        else:
+
+            st.error(
+                "❌ Loan is likely to be REJECTED"
+            )
+
+        st.write(
+            f"Approval Probability: "
+            f"**{probability * 100:.2f}%**"
         )
 
 
-    st.write(
-        f"Approval Probability: "
-        f"**{probability * 100:.2f}%**"
-    )
+    except Exception as e:
+
+        st.error("❌ Prediction Error")
+
+        st.code(str(e))
+
+        st.write("### Columns currently sent to the model:")
+
+        st.write(
+            input_data.columns.tolist()
+        )
+
+        st.write("### Input data:")
+
+        st.dataframe(input_data)
+
+        st.warning(
+            "The saved model expects different/more columns "
+            "than the Streamlit app is currently providing."
+        )
