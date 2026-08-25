@@ -133,11 +133,12 @@ if st.button("Predict Loan Approval"):
     # 7. DISPLAY RESULT
     # =====================================================
 
-    if prediction == 1:
+   if st.button("Predict Loan Approval"):
 
-        st.success(
-            "✅ Loan is likely to be APPROVED"
-        )
+        st.write("Columns being sent:")
+        st.write(input_data.columns.tolist())
+
+        prediction = model.predict(input_data)[0]
 
     else:
 
